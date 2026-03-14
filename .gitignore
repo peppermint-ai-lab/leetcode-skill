@@ -1,0 +1,5 @@
+*.claude
+*.cursor
+*.interview/**
+__pycache__/
+*solution*
