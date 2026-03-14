@@ -24,6 +24,7 @@ Parse `$ARGUMENTS` for:
 1. Parse the note content
 2. Ask for tags (or extract from content): `Tags? (e.g., sliding-window, edge-cases)`
 3. Save to `.interview/notes/{date}_{slug}.md`:
+4. For problems create different files for language or framework just write `.interview/notes/{language}.md`
 
 ```markdown
 # [Title or first line]
@@ -36,22 +37,15 @@ Parse `$ARGUMENTS` for:
 
 {content}
 
----
 
-## Review History
-| Date | Recall | Next |
-|------|--------|------|
-```
-
-4. Confirm: "Note saved. Tagged: {tags}. Review tomorrow."
+5. Confirm: "Note saved. Tagged: {tags}. Review tomorrow."
 
 ### Review
 
 `/notes review`
 
 1. Read all notes from `.interview/notes/`
-2. Find notes where `Next Review <= today`
-3. For each due note:
+2. For each due note:
    - Show the note content
    - Ask: "How well do you remember this? (1=forgot, 2=hard, 3=good, 4=easy)"
    - Update next review based on spaced repetition:
