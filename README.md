@@ -15,8 +15,8 @@ AI-powered coding interview practice for [Claude Code](https://claude.ai/claude-
 
 ```bash
 # Clone and open in VS Code
-git clone https://github.com/YOUR_USERNAME/coding-interview-skill.git
-cd coding-interview-skill
+git clone https://github.com/peppermint-ai-lab/leetcode-skill.git
+cd leetcode-skill
 code .
 # Click "Reopen in Container" when prompted
 ```
