@@ -90,6 +90,83 @@ The `SKILL.md` files are self-contained prompts. For any AI tool:
 3. **Provide context:** Share your `user-profile.md` for personalized difficulty
 4. **Start the session:** Use the trigger phrase (e.g., `/interview`)
 
+### Dev Containers
+
+This repo includes a Dev Container for a consistent development environment.
+
+**Using the included container (Python):**
+
+1. Open in VS Code
+2. Install the "Dev Containers" extension
+3. Click "Reopen in Container" when prompted (or run `Dev Containers: Reopen in Container` from command palette)
+
+**Adding a container for another language:**
+
+Create `.devcontainer/devcontainer.json` with your language's base image:
+
+**Java:**
+```json
+{
+  "name": "Coding Interview Practice - Java",
+  "image": "mcr.microsoft.com/devcontainers/java:17",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack"
+      ]
+    }
+  }
+}
+```
+
+**Go:**
+```json
+{
+  "name": "Coding Interview Practice - Go",
+  "image": "mcr.microsoft.com/devcontainers/go:1.21",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "golang.go"
+      ]
+    }
+  }
+}
+```
+
+**JavaScript/TypeScript:**
+```json
+{
+  "name": "Coding Interview Practice - Node",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  }
+}
+```
+
+**Multiple languages:**
+
+Use separate folders for each language:
+
+```
+.devcontainer/
+├── python/
+│   └── devcontainer.json
+├── java/
+│   └── devcontainer.json
+└── go/
+    └── devcontainer.json
+```
+
+VS Code will prompt you to choose which container to use.
+
+Find more base images at [mcr.microsoft.com/devcontainers](https://mcr.microsoft.com/en-us/catalog?search=devcontainers).
+
 ## Usage
 
 ### Start a Practice Session
