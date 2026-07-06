@@ -3,3 +3,6 @@
 *.interview/**
 __pycache__/
 *solution*
+**/.lc-grind/
+**/.python-drills/
+**/practice.py

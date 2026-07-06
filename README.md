@@ -1,10 +1,13 @@
 # Coding Interview Prep - Claude Code Skills
 
-AI-powered coding interview practice for [Claude Code](https://claude.ai/claude-code). LeetCode-style problems with follow-ups and detailed feedback.
+AI-powered coding interview practice for [Claude Code](https://claude.ai/claude-code). LeetCode-style pattern drills, multi-part "build" problems, Python fluency reps, and company-specific research — all with follow-ups and strict feedback.
 
 ## Features
 
 - **AI-Generated Questions** - Problems based on 14 common patterns
+- **Multi-Part Build Problems** - CodeSignal ICA-style problems that grow across 4 progressive levels (`/progressive`)
+- **Python Fluency Drills** - Short reps on Python data structures and idioms (`/python-drills`)
+- **Company Research** - Find what a company/role actually asked recently, with source URLs (`/research`, `/research-agent`)
 - **Strict Evaluation** - Pass/fail rubric matches real interview standards
 - **Dynamic Follow-ups** - Context-aware questions about your approach
 - **Concrete Notes** - Cheat sheets with examples from problems you solved
@@ -212,6 +215,41 @@ Based on your mistakes, get personalized cheat sheets:
 
 ## Other Skills
 
+### Progressive Build Problems
+
+Multi-part, progressively-revealed build problems — one project that grows across 4 levels, where each part unlocks only after the previous one passes. This mirrors the **CodeSignal Industry Coding Assessment (ICA)** format used by companies like Uber, Instacart, Robinhood, TikTok, Databricks, Zoom, and Brex: implementation and refactoring over algorithm puzzles.
+
+```bash
+/progressive                        # Domain menu + progress
+/progressive --random               # Random backend/systems problem
+/progressive --domain file-host     # Specific domain (kv-store, rate-limiter, ledger...)
+/progressive --custom "..."         # Author from your own domain
+/progressive --repo                 # Multi-file "fix the repo" variant
+/progressive --lang go              # Non-Python workspace
+/progressive --continue             # Resume in-progress problem
+```
+
+### Python Fluency Drills
+
+Short, targeted reps on Python data structures and idioms — muscle memory, not algorithms:
+
+```bash
+/python-drills                      # Topic menu
+/python-drills --topic deque        # Drill a specific topic (heapq, defaultdict...)
+/python-drills --next               # Least-practiced topic
+/python-drills --status             # Mastery overview
+```
+
+### Company / Role Research
+
+Find what coding problems a company or role asked recently across 5 sources (Glassdoor, LeetCode Forums, Hello Interview, LeetCode problem sets, Blind). Every finding carries a source URL.
+
+```bash
+/research Google                    # Research a company (last 3 months)
+/research --source blind --months 6 # One source, wider window
+/research-agent "Senior SWE at Stripe"   # Role-targeted sweep, maps vague descriptions to LeetCode problems
+```
+
 ### Focus Mode
 
 Disable AI autocomplete for authentic practice:
@@ -245,6 +283,18 @@ Skills are defined in `SKILL.md` files inside each skill folder. You can modify 
 │   └── references/
 │       ├── feedback-rubric.md    # Evaluation criteria
 │       └── hidden-test-guidance.md
+├── progressive/             # Multi-part build problems (CodeSignal ICA-style)
+│   ├── SKILL.md
+│   └── references/
+│       ├── authoring.md         # Problem generation engine
+│       ├── domains.md           # Domain catalog (seeds)
+│       └── rubric.md            # Evaluation rubric
+├── python-drills/           # Python fluency reps
+│   └── SKILL.md
+├── research/                # Company interview research
+│   └── SKILL.md
+├── research-agent/          # Role-targeted research sweep
+│   └── SKILL.md
 ├── studykit-manager/
 │   └── SKILL.md
 └── focus-mode/
@@ -275,12 +325,19 @@ Edit the pattern list in `interview/SKILL.md` and update `.interview/user-profil
 ```
 ├── .claude/skills/          # Skill definitions (customize these)
 │   ├── interview/
+│   ├── progressive/
+│   ├── python-drills/
+│   ├── research/
+│   ├── research-agent/
 │   ├── studykit-manager/
 │   └── focus-mode/
 ├── .interview/              # Runtime data (auto-generated)
 │   ├── user-profile.md      # Your settings and progress
 │   ├── notes/               # Your cheat sheets
 │   └── performance/         # Session history and stats
+├── .lc-grind/               # Pattern-drill problem list & progress
+├── .progressive/            # Progressive-build workspace & progress
+├── .python-drills/          # Python-drill progress
 ├── screenshots/             # Example images for README
 └── solution.py              # Your solution file
 ```

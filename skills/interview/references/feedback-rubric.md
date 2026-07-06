@@ -20,7 +20,7 @@ Use this rubric when evaluating user solutions and providing feedback.
 - Magic numbers (use named constants)
 - Functions not single-responsibility or too large (>20 lines without reason)
 - Any unhandled edge case (empty input, single element, duplicates, negatives, overflow)
-- Unnecessary code, dead code, or excessive comments
+- Unnecessary code, dead code, or excessive comments (exclude `# TODO: Implement` from template)
 - Inefficient data structure choices
 - Code duplication/redundancy
 - Overly complex logic (nested ternaries, deep nesting >3 levels)
