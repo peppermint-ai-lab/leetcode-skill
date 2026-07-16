@@ -6,3 +6,4 @@ __pycache__/
 **/.lc-grind/
 **/.python-drills/
 **/practice.py
+*.progressive

@@ -108,6 +108,28 @@ Type a number or topic name:
 
 ## Phase 2: Drill Loop (3 drills per session)
 
+**At the top of the session, state the rules once:** each drill has a **3-minute
+cap**; going overtime (or needing a `hint`) counts as a **FAIL** and you redo the
+same drill. You hold the clock — the user shouldn't have to watch it.
+
+### Running the clock (your job, not the user's)
+
+For **every** drill, automatically:
+
+- Record the start time when you present the drill:
+  `python3 -c "import time; print(int(time.time()))"`.
+- Arm two **background** timers (`Bash` with `run_in_background: true`, using
+  `sleep <seconds> && echo "TIMER: ..."` — never a foreground `sleep`, which is
+  blocked): one at **1 min remaining** (`sleep 120`) and one at the **3-min cap**
+  (`sleep 180`). You'll be re-invoked when each fires; relay it immediately
+  ("⏱ 1 min left" / "⏱ Time — 3:00. This drill is a FAIL; finish it, then we
+  redo the same one.").
+- Setup time doesn't count — start the clock when you present the drill. Before the
+  next drill, **stop the previous drill's timers (`TaskStop`)** so they don't fire
+  stale.
+- When asked "how much time is left?", answer from your own timer — never tell the
+  user to track it themselves.
+
 For each drill:
 
 ### 2a. Pick a drill
@@ -118,7 +140,7 @@ From `references/topics.md`, pick the next drill for the chosen topic in order. 
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DRILL: [Topic] > [Drill Name]          [N of 3]
+DRILL: [Topic] > [Drill Name]          [N of 3]  ⏱ 3:00
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [Task — described in plain English. Never name the method or function they should use.
 Say what to accomplish, not how. Examples:
@@ -164,7 +186,9 @@ If it errors, fix it before presenting the drill.
 
 1. Read `practice.py`
 2. Run: `uv run pytest practice.py -v`
-3. Check:
+3. Compute elapsed (now − start time) and check:
+   - **Under the 3-min cap, and no `hint` used?** Overtime or a hint → **FAIL**,
+     regardless of correctness → redo the **same** drill next.
    - Do all tests pass?
    - Is the right Python construct used?
    - Is it idiomatic?
@@ -200,7 +224,10 @@ If it errors, fix it before presenting the drill.
     If correct, show the idiom and when to reach for it. Always concrete, never abstract.]
    ```
 
-6. Increment `drills_done` in `progress.json`. Update `last_seen`:
+6. **Stop this drill's background timers (`TaskStop`)** now that it's graded, so
+   they don't fire during the next drill. On a **FAIL** (overtime or hint), redo
+   the same drill and do **not** increment `drills_done`. On a pass, increment
+   `drills_done` in `progress.json` and update `last_seen`:
    ```bash
    python3 -c "import time; print(int(time.time()))"
    ```
@@ -272,6 +299,10 @@ Call these out immediately and specifically:
   - ✗ "Implement Dijkstra" — algorithm
 - **Always run pytest.** Every evaluation runs `uv run pytest practice.py -v`. A test failure is feedback, not a reason to skip.
 - **Terse feedback.** One sentence of what worked, one sentence of what to fix. No paragraphs.
-- **One hint max per drill.**
+- **One hint max per drill** — and using it is a FAIL (redo the same drill).
+- **You own the clock, not the user.** State the 3-min cap + hint rule up front,
+  arm background timers at every drill's start, warn at 1 min left and call time at
+  the cap, and answer "time left?" from your own timer. Overtime = FAIL → redo the
+  same drill. Never make the user track their own time. (Hard rule.)
 - **Repetition is the point.** Don't shy away from re-covering a topic in future sessions.
 - **Flag version-unsafe code** the same way you flag bad idioms — specific and immediate.

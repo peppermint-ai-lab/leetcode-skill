@@ -132,6 +132,27 @@ Write your code in [solution file].
 
 **Tell the user the time budget at the start** (both total and this part) — always.
 
+8. **Start the clock — automatically, the moment you present the part.** You own
+   the timer; the user is heads-down building. See "Running the clock" below.
+
+### Running the clock (your job, not the candidate's)
+
+The candidate can't also watch a stopwatch. **You** hold the per-part timer:
+
+- On part start you already set `part_start_time`. Arm two **background** timers
+  (`Bash` with `run_in_background: true`, using `sleep <seconds> && echo "TIMER:
+  ..."` — never a foreground `sleep`, which is blocked): one at **5 min remaining**
+  on this part's target (`part_time_limit_seconds - 300`, e.g. `sleep 600` for a
+  15-min part) and one at the **part cap** (`part_time_limit_seconds`). You'll be
+  re-invoked when each fires; relay it immediately ("⏱ 5 min left on Part N" /
+  "⏱ Part N target hit — wrap up or say 'done'."). Track total budget too and
+  flag it if the whole session runs long.
+- Setup time doesn't count — start the clock when you present the part. On each
+  new part, **stop the old background timers** (`TaskStop`) before arming the new
+  ones (see Phase 5), so stale part-timers don't fire.
+- When asked "how much time is left?", answer from your own timer — never tell the
+  user to track it themselves.
+
 ---
 
 ## Phase 3: Solve loop (per part)
@@ -141,7 +162,7 @@ Write your code in [solution file].
 - **"skip"** → show a model solution for the current part + why it matters for later parts, then **end the problem** (record as not-passed at this part). Do not continue revealing parts.
 - **"done"** → Phase 4.
 
-Enforce time. If `part_start_time` elapsed exceeds `part_time_limit_seconds`, call it out: `⏱ 16:40 — over the Part N target.` Compute elapsed with `python3 -c "import time; print(int(time.time()))"` and the session timestamps (or reuse `../interview/utils/session_time.py`).
+Enforce time actively — you armed the background timers in Phase 2, so relay the 5-min-left and part-cap warnings the instant they fire. If `part_start_time` elapsed exceeds `part_time_limit_seconds`, call it out: `⏱ 16:40 — over the Part N target.` Compute elapsed with `python3 -c "import time; print(int(time.time()))"` and the session timestamps (or reuse `../interview/utils/session_time.py`).
 
 ---
 
@@ -173,6 +194,8 @@ FIX          [1–2 concrete things, specific to their code]
 Only after a pass:
 1. If `current_part == total_parts` → Phase 7 (final wrap-up).
 2. Else, increment `current_part`, reset `part_start_time`, update session.
+   **Stop the previous part's background timers (`TaskStop`) and re-arm fresh ones
+   for the new part** (5 min left + part cap), per "Running the clock".
 3. **Read `PROBLEM.md`, `tests_visible.py`, and the solution file first**, then:
    - Append the new part's spec to `PROBLEM.md`.
    - Append the new part's visible tests to `tests_visible.py` (Edit/append — never rewrite the file).
@@ -226,8 +249,13 @@ Instead of 4 progressive parts, generate a small **broken/incomplete backend rep
 ## Guidelines
 
 - **Never reveal parts ahead of time.** One part visible at a time. This is the core mechanic.
+- **Never volunteer hints.** Do not offer design ideas, data-structure names, algorithm/idiom suggestions, or "hint (not the answer)" nudges unless the user explicitly types `hint`. When presenting a part, state only the spec, signatures, examples, time budget, and the run/done/hint/skip controls — nothing about *how* to solve it. Pointing out a concrete bug in code the user already wrote (e.g. a crash or a failing test) is allowed; pre-emptively steering their approach is not. This is a hard rule — the whole point is that they design it themselves.
 - **Read before you write, every part.** Never overwrite the user's solution file; add stubs/fixtures with Edit. (This is a hard rule.)
 - **Tell the time budget up front** and enforce it strictly per part and overall.
+- **You own the clock, not the candidate.** Arm background timers at each part's
+  start, warn at 5 min left and at the part cap, re-arm on every new part (stop the
+  old ones first), and answer "time left?" from your own timer. Never tell the user
+  to track their own time. (Hard rule.)
 - **Fail means fail.** Hidden tests fail → the part fails → the next part stays locked.
 - **No proprietary copying.** Author fresh specs in original domains.
 - **Deterministic tests only.** No wall-clock/threads in requirements — simulate time and concurrency via an injected clock / explicit step ordering (see `references/authoring.md`).

@@ -150,6 +150,28 @@ Write your solution in practice.py.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
+5. **Start the clock — automatically, the moment you present the problem.** Tell
+   the user up front: "20:00 on the clock — I'll warn you at 5 min left and call
+   time at the cap." See "Running the clock" below. Do not push timekeeping onto
+   the user.
+
+### Running the clock (your job, not the candidate's)
+
+The candidate is heads-down solving — they can't also watch a stopwatch. **You**
+hold the timer:
+
+- On problem start, you already recorded `start_time`. Arm two **background**
+  timers (`Bash` with `run_in_background: true`, using `sleep <seconds> && echo
+  "TIMER: ..."` — never a foreground `sleep`, which is blocked): one at **5 min
+  remaining** (`sleep 900`) and one at the **20-min cap** (`sleep 1200`). You'll
+  be re-invoked when each fires; relay it to the user immediately
+  ("⏱ 5 minutes left" / "⏱ Time — 20:00. Wrap up and say 'done'.").
+- Setup time doesn't count — start the clock when you present the problem. If the
+  user asks to pause or restart, stop the old background tasks (`TaskStop`) and
+  re-arm from the recalculated remainder.
+- When asked "how much time is left?", answer from your own timer (elapsed =
+  now − `start_time`) — never tell the user to track it themselves.
+
 ---
 
 ## Phase 3: Solve Loop
@@ -242,7 +264,10 @@ If failed: do NOT show the solution. Tell them what's wrong, let them fix it.
 ## Guidelines
 
 - **No hints unprompted.** Never suggest an approach unless asked.
-- **Be strict on time.** If they go over 20 min, call it out: "X:XX — over the limit."
+- **Be strict on time, and own the clock.** Start background timers at problem
+  start, warn at 5 min left and call time at the 20-min cap, and answer "time
+  left?" from your own timer — never make the candidate track it. If they go over,
+  call it out: "X:XX — over the limit." (Hard rule.)
 - **Fail means fail.** If tests don't pass, it's a fail. Don't soften it.
 - **One hint max.** Name the pattern — nothing more.
 - **Pattern first.** Every evaluation leads with the pattern name and recognition cues. This is the whole point.
